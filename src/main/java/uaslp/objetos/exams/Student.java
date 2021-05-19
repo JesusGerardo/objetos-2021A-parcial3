@@ -1,16 +1,19 @@
 package uaslp.objetos.exams;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Student {
     private String name;
     private int code;
-    List<Integer> scores;
-    double average;
+    private Integer scores[];
+    double average = 0;
 
     public Student(String name, int code){
         this.name = name;
         this.code = code;
+        scores = new Integer [3];
     }
 
     public String getName() {
@@ -25,14 +28,15 @@ public class Student {
         if(position <1 || position >3){
             throw new InvalidPartialException();
         }
-        scores.add(position,score);
+        this.scores[position-1] = score;
     }
 
     public double getAverage() throws MissingScoreException{
-        if(scores.get(1)==null || scores.get(2)==null || scores.get(3)==null){
-            throw new MissingScoreException();
+        for(int i=0;i<3;i++) {
+            if (scores[i] == null)
+                throw new MissingScoreException("Missing partial " + (i+1));
+            average += scores[i];
         }
-        average = scores.get(1)+scores.get(2)+scores.get(3);
         return average/3;
     }
 }
